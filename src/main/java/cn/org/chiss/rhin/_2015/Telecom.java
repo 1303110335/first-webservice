@@ -6,26 +6,28 @@
 //
 
 
-package io.spring.guides.gs_producing_web_service;
+package cn.org.chiss.rhin._2015;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>anonymous complex type的 Java 类。
+ * 通讯地址
+ * 
+ * <p>Telecom complex type的 Java 类。
  * 
  * <p>以下模式片段指定包含在此类中的预期内容。
  * 
  * <pre>
- * &lt;complexType>
+ * &lt;complexType name="Telecom">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="use" type="{http://www.chiss.org.cn/rhin/2015}TelecomMode"/>
+ *         &lt;element name="value" type="{http://www.chiss.org.cn/rhin/2015}String"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -35,37 +37,63 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "name"
+@XmlType(name = "Telecom", propOrder = {
+    "use",
+    "value"
 })
-@XmlRootElement(name = "getCountryRequest")
-public class GetCountryRequest {
+public class Telecom {
 
     @XmlElement(required = true)
-    protected String name;
+    protected TelecomMode use;
+    @XmlElement(required = true)
+    protected String value;
 
     /**
-     * 获取name属性的值。
+     * 获取use属性的值。
+     * 
+     * @return
+     *     possible object is
+     *     {@link TelecomMode }
+     *     
+     */
+    public TelecomMode getUse() {
+        return use;
+    }
+
+    /**
+     * 设置use属性的值。
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link TelecomMode }
+     *     
+     */
+    public void setUse(TelecomMode value) {
+        this.use = value;
+    }
+
+    /**
+     * 获取value属性的值。
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getName() {
-        return name;
+    public String getValue() {
+        return value;
     }
 
     /**
-     * 设置name属性的值。
+     * 设置value属性的值。
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setName(String value) {
-        this.name = value;
+    public void setValue(String value) {
+        this.value = value;
     }
 
 }

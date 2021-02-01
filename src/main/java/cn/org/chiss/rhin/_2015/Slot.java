@@ -6,26 +6,28 @@
 //
 
 
-package io.spring.guides.gs_producing_web_service;
+package cn.org.chiss.rhin._2015;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>anonymous complex type的 Java 类。
+ * 插槽类型，用于查询、过滤器、主题等插入条件。
+ * 
+ * <p>Slot complex type的 Java 类。
  * 
  * <p>以下模式片段指定包含在此类中的预期内容。
  * 
  * <pre>
- * &lt;complexType>
+ * &lt;complexType name="Slot">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="name" type="{http://www.chiss.org.cn/rhin/2015}String"/>
+ *         &lt;element name="valueList" type="{http://www.chiss.org.cn/rhin/2015}ValueList"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -35,14 +37,16 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "name"
+@XmlType(name = "Slot", propOrder = {
+    "name",
+    "valueList"
 })
-@XmlRootElement(name = "getCountryRequest")
-public class GetCountryRequest {
+public class Slot {
 
     @XmlElement(required = true)
     protected String name;
+    @XmlElement(required = true)
+    protected ValueList valueList;
 
     /**
      * 获取name属性的值。
@@ -66,6 +70,30 @@ public class GetCountryRequest {
      */
     public void setName(String value) {
         this.name = value;
+    }
+
+    /**
+     * 获取valueList属性的值。
+     * 
+     * @return
+     *     possible object is
+     *     {@link ValueList }
+     *     
+     */
+    public ValueList getValueList() {
+        return valueList;
+    }
+
+    /**
+     * 设置valueList属性的值。
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ValueList }
+     *     
+     */
+    public void setValueList(ValueList value) {
+        this.valueList = value;
     }
 
 }

@@ -46,4 +46,20 @@ public class WebServiceConfig extends WsConfigurerAdapter {
     public XsdSchema countriesSchema() {
         return new SimpleXsdSchema(new ClassPathResource("countries.xsd"));
     }
+
+    @Bean(name = "organizationRegister")
+    public DefaultWsdl11Definition orgWsdl11Definition(XsdSchema organizationRegisterSchema) {
+        // 使用XsdSchema公开标准WSDL 1.1 发布描述文件，访问路径：http://<host>:<port>/ws/countries.wsdl
+        DefaultWsdl11Definition orgWsdl11Definition = new DefaultWsdl11Definition();
+        orgWsdl11Definition.setPortTypeName("OrganizationRegisterPort");
+        orgWsdl11Definition.setLocationUri("/orgws");
+        orgWsdl11Definition.setTargetNamespace("http://spring.io/guides/org-producing-web-service");
+        orgWsdl11Definition.setSchema(organizationRegisterSchema);
+        return orgWsdl11Definition;
+    }
+
+    @Bean
+    public XsdSchema organizationRegisterSchema() {
+        return new SimpleXsdSchema(new ClassPathResource("organizationRegister.xsd"));
+    }
 }

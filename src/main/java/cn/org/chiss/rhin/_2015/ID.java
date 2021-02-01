@@ -6,28 +6,26 @@
 //
 
 
-package io.spring.guides.gs_producing_web_service;
+package cn.org.chiss.rhin._2015;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>anonymous complex type的 Java 类。
+ * <p>ID complex type的 Java 类。
  * 
  * <p>以下模式片段指定包含在此类中的预期内容。
  * 
  * <pre>
- * &lt;complexType>
+ * &lt;complexType name="ID">
  *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *       &lt;/sequence>
- *     &lt;/restriction>
+ *     &lt;extension base="{http://www.chiss.org.cn/rhin/2015}Any">
+ *       &lt;attribute name="value" type="{http://www.chiss.org.cn/rhin/2015}idPrimitive" />
+ *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
@@ -35,37 +33,39 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "name"
+@XmlType(name = "ID")
+@XmlSeeAlso({
+    MainID.class
 })
-@XmlRootElement(name = "getCountryRequest")
-public class GetCountryRequest {
+public class ID
+    extends Any
+{
 
-    @XmlElement(required = true)
-    protected String name;
+    @XmlAttribute(name = "value")
+    protected java.lang.String value;
 
     /**
-     * 获取name属性的值。
+     * 获取value属性的值。
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link java.lang.String }
      *     
      */
-    public String getName() {
-        return name;
+    public java.lang.String getValue() {
+        return value;
     }
 
     /**
-     * 设置name属性的值。
+     * 设置value属性的值。
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link java.lang.String }
      *     
      */
-    public void setName(String value) {
-        this.name = value;
+    public void setValue(java.lang.String value) {
+        this.value = value;
     }
 
 }

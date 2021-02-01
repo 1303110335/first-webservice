@@ -1,0 +1,1324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ver.0.12.3/2018-07-11 Dejun Hsu-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.chiss.org.cn/rhin/2015"
+           targetNamespace="http://www.chiss.org.cn/rhin/2015" elementFormDefault="qualified">
+    <xs:simpleType name="nullFlavorPrimitive">
+        <xs:annotation>
+            <xs:documentation>
+                NI - 无法从任何情况下获取信息(粗粒度值)
+                NA - 该值不适用于该上下文
+                NP - 在消息中该值不存在
+                NASK - 未询问患者
+                ASKU - 询问过患者,但是不知道
+                MSK - 因安全等原因该值被掩藏
+                NAV - 该值当前不可用,但在可预期的将来该值一定可用
+                UNK - 有值可用,但是不知道
+                OTH - 其它
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="stringPrimitive">
+            <xs:enumeration value="UNK"/>
+            <xs:enumeration value="NAV"/>
+            <xs:enumeration value="NASK"/>
+            <xs:enumeration value="ASKU"/>
+            <xs:enumeration value="NP"/>
+            <xs:enumeration value="NA"/>
+            <xs:enumeration value="NI"/>
+            <xs:enumeration value="MSK"/>
+            <xs:enumeration value="OTH"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="Any" abstract="true">
+        <xs:attribute name="nullFlavor" type="nullFlavorPrimitive" use="optional"/>
+    </xs:complexType>
+    <xs:simpleType name="stringPrimitive">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="String">
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:attribute name="value" type="stringPrimitive" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="booleanPrimitive">
+        <xs:restriction base="xs:boolean"/>
+    </xs:simpleType>
+    <xs:complexType name="Boolean">
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:attribute name="value" type="booleanPrimitive"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="datePrimitive">
+        <xs:restriction>
+            <xs:simpleType>
+                <xs:union memberTypes="xs:gYear xs:gYearMonth xs:date"/>
+            </xs:simpleType>
+            <xs:pattern value="-?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1]))?)?"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="Date">
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:attribute name="value" type="datePrimitive"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="timePrimitive">
+        <xs:restriction base="xs:time">
+            <xs:pattern value="([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="Time">
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:attribute name="value" type="timePrimitive"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="dateTimePrimitive">
+        <xs:restriction>
+            <xs:simpleType>
+                <xs:union memberTypes="xs:gYear xs:gYearMonth xs:date xs:dateTime"/>
+            </xs:simpleType>
+            <xs:pattern
+                    value="-?[0-9]{4}(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(Z|(\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00))?)?)?)?"
+            />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="DateTime">
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:attribute name="value" type="dateTimePrimitive"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="durationUnitPrimitive">
+        <xs:restriction base="stringPrimitive">
+            <xs:enumeration value="yr"/>
+            <xs:enumeration value="mth"/>
+            <xs:enumeration value="wk"/>
+            <xs:enumeration value="d"/>
+            <xs:enumeration value="h"/>
+            <xs:enumeration value="min"/>
+            <xs:enumeration value="s"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="Duration">
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:attribute name="value" type="unsignedIntPrimitive"/>
+                <xs:attribute name="unit" type="durationUnitPrimitive"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="languagePrimitive">
+        <xs:restriction base="xs:language"/>
+    </xs:simpleType>
+    <xs:complexType name="Language">
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:attribute name="value" type="languagePrimitive"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:simpleType name="codePrimitive">
+        <xs:restriction base="xs:token">
+            <xs:minLength value="1"/>
+            <xs:pattern value="[^\s]+([\s]?[^\s]+)*"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="Code">
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:attribute name="value" type="codePrimitive"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="unsignedIntPrimitive">
+        <xs:restriction base="xs:nonNegativeInteger">
+            <xs:pattern value="[0]|([1-9][0-9]*)"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="UnsignedInt">
+        <xs:annotation>
+            <xs:documentation>正整数</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:attribute name="value" type="unsignedIntPrimitive"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="integerPrimitive">
+        <xs:restriction base="xs:int">
+            <xs:pattern value="-?([0]|([1-9][0-9]*))"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="Integer">
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:attribute name="value" type="integerPrimitive" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="decimalPrimitive">
+        <xs:restriction base="xs:decimal">
+            <xs:pattern value="-?([0]|([1-9][0-9]*))(\.[0-9]+)?"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="Decimal">
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:attribute name="value" type="decimalPrimitive"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="ncNamePrimitive">
+        <xs:restriction base="xs:NCName"/>
+    </xs:simpleType>
+    <xs:complexType name="NCName">
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:attribute name="value" type="ncNamePrimitive" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="qNamePrimitive">
+        <xs:restriction base="xs:QName"/>
+    </xs:simpleType>
+    <xs:complexType name="QName">
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:attribute name="value" type="qNamePrimitive" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="base64BinaryPrimitive">
+        <xs:restriction base="xs:base64Binary"/>
+    </xs:simpleType>
+    <xs:complexType name="Base64Binary">
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:attribute name="value" type="base64BinaryPrimitive" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="uriPrimitive">
+        <xs:restriction base="xs:anyURI"/>
+    </xs:simpleType>
+    <xs:complexType name="URI">
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:attribute name="value" type="uriPrimitive"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="urnPrimitive">
+        <xs:restriction base="xs:anyURI">
+            <xs:pattern value="urn:[A-Za-z0-9:_\-\.]{1,}"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="URN">
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:attribute name="value" type="urnPrimitive"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="idPrimitive">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:pattern value="[A-Za-z0-9\-\.]{1,64}"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="ID">
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:attribute name="value" type="idPrimitive"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="oidPrimitive">
+        <xs:restriction base="urnPrimitive">
+            <xs:minLength value="1"/>
+            <xs:pattern value="urn:oid:(0|[1-9][0-9]*)(\.(0|[1-9][0-9]*))*"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="OID">
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:attribute name="value" type="oidPrimitive"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="uuidPrimitive">
+        <xs:restriction base="urnPrimitive">
+            <xs:minLength value="1"/>
+            <xs:pattern
+                    value="urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="UUID">
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:attribute name="value" type="uuidPrimitive"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="instantPrimitive">
+        <xs:restriction base="xs:dateTime"/>
+    </xs:simpleType>
+    <xs:complexType name="Instant">
+        <xs:annotation>
+            <xs:documentation>精确时间,总是包括时区.通常用于系统日志记录,该时间非用于人读.</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:attribute name="value" type="instantPrimitive" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="Identifier">
+        <xs:annotation>
+            <xs:documentation>标识域ID</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:sequence>
+                    <xs:element name="system" type="URI" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation>标识域、系统</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="value" type="ID" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="Period">
+        <xs:annotation>
+            <xs:documentation>时间段</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:sequence>
+                    <xs:element name="start" type="DateTime"/>
+                    <xs:element name="end" type="DateTime" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="duration" type="Duration" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="Reference">
+        <xs:annotation>
+            <xs:documentation>引用</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:sequence>
+                    <xs:element name="reference" type="Identifier" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation>引用指向.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="display" type="String" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation>显示名称.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="Coding">
+        <xs:annotation>
+            <xs:documentation>编码概念</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:sequence>
+                    <xs:element name="code" type="Code" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation>编码值</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="display" type="String" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation>编码的显示名称.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="system" type="URI" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation>所属编码系统</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="systemName" type="String">
+                        <xs:annotation>
+                            <xs:documentation>编码系统名称</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="version" type="String" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation>版本</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="CodeableConcept">
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:sequence>
+                    <xs:element name="coding" type="Coding" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element name="text" type="String" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="Quantity">
+        <xs:annotation>
+            <xs:documentation>计量值</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:sequence>
+                    <xs:element name="value" type="Decimal" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation>测量值</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="unit" type="String" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation>人可读的单位</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="nameUsePrimitive">
+        <xs:annotation>
+            <xs:documentation>姓名的用途的枚举值</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Usual">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">常用名</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Official">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">正式名字</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Temp">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">临时名字</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Nickname">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">昵称、网名、号</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Anonymous">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">别名（字）</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Old">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">曾用名</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Maiden">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">婚前名</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="NameUse">
+        <xs:annotation>
+            <xs:documentation xml:lang="en"/>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:attribute name="value" type="nameUsePrimitive" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="HumanName">
+        <xs:annotation>
+            <xs:documentation>人的姓名</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:sequence minOccurs="0" maxOccurs="1">
+                    <xs:element minOccurs="0" name="use" type="NameUse">
+                        <xs:annotation>
+                            <xs:documentation>姓名用途</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="family" type="String">
+                        <xs:annotation>
+                            <xs:documentation>姓</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="given" type="String">
+                        <xs:annotation>
+                            <xs:documentation>名字</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="prefix" type="String">
+                        <xs:annotation>
+                            <xs:documentation>前缀</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="suffix" type="String">
+                        <xs:annotation>
+                            <xs:documentation>后缀</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="period" type="Period" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>有效时间段</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="text" type="String">
+                        <xs:annotation>
+                            <xs:documentation>补充说明</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="value" type="stringPrimitive">
+                    <xs:annotation>
+                        <xs:documentation>全名</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="addressUsePrimitive">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Home">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">家庭地址</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Work">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">工作地址</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Temp">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">临时地址</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Old">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">旧地址</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="AddressUse">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">地址的用途</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:attribute name="value" type="addressUsePrimitive" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="addressTypePrimitive">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Postal">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">投递地址</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Physical">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">地理位置.</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Both">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">投递地址与地理位置通用.</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="AddressType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">地址类别.</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:attribute name="value" type="addressTypePrimitive" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="Address">
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="use" type="AddressUse">
+                        <xs:annotation>
+                            <xs:documentation>地址类型</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="type" type="AddressType"/>
+                    <xs:element name="text" type="String" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>地址的纯文本写法</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="administrativeDivision" type="String">
+                        <xs:annotation>
+                            <xs:documentation>行政区划</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="country" type="String">
+                        <xs:annotation>
+                            <xs:documentation>国家</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="state" type="String">
+                        <xs:annotation>
+                            <xs:documentation>省、自治区、直辖市</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="city" type="String">
+                        <xs:annotation>
+                            <xs:documentation>地级市、区、盟</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="district" type="String">
+                        <xs:annotation>
+                            <xs:documentation>县、县级市、地区、旗</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="town" type="String">
+                        <xs:annotation>
+                            <xs:documentation>乡（镇、街道办事处）</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="street" type="String">
+                        <xs:annotation>
+                            <xs:documentation>村（街、路、弄等）</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="houseNumber" type="String">
+                        <xs:annotation>
+                            <xs:documentation>门牌号码</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="line" type="String" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:documentation>结构化地址的其它信息</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="postalCode" minOccurs="0" type="String">
+                        <xs:annotation>
+                            <xs:documentation>邮政编码</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="period" type="Period">
+                        <xs:annotation>
+                            <xs:documentation>地址的有效时间段</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="BackboneElement">
+        <xs:annotation>
+            <xs:documentation>资源定义内部所有元素的基类</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="Any"/>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="telecomModePrimitive">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Telephone">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">投递地址</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Cellphone">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">地理位置.</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Email">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">投递地址与地理位置通用.</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="QQ"/>
+            <xs:enumeration value="Wechat"/>
+            <xs:enumeration value="Other"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="TelecomMode">
+        <xs:annotation>
+            <xs:documentation>联系方式的类型</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:attribute name="value" type="telecomModePrimitive" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="Telecom">
+        <xs:annotation>
+            <xs:documentation>通讯地址</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="use" type="TelecomMode"/>
+            <xs:element name="value" type="String"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="NameValuePairType">
+        <xs:annotation>
+            <xs:documentation>编码名值对类型</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="name" type="stringPrimitive" use="required"/>
+        <xs:attribute name="value" type="stringPrimitive" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="ValueList">
+        <xs:annotation>
+            <xs:documentation>值列表，多个值之间为或的关系</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="value" type="String" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Slot">
+        <xs:annotation>
+            <xs:documentation>插槽类型，用于查询、过滤器、主题等插入条件。</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="name" type="String">
+                <xs:annotation>
+                    <xs:documentation>关键字</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element maxOccurs="1" name="valueList" type="ValueList">
+                <xs:annotation>
+                    <xs:documentation>取值列表,多值之间为OR关系</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="SlotListType">
+        <xs:annotation>
+            <xs:documentation>插槽列表类型，多个插槽间是并的关系。</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="slot" type="Slot"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="NullResponse"/>
+
+
+
+
+    <xs:complexType name="RegObject" abstract="true">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="id" type="MainID">
+                <xs:annotation>
+                    <xs:documentation>注册对象的唯一标识号, 由注册对象管理方分配</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="statusCode" type="ObjectStatus">
+                <xs:annotation>
+                    <xs:documentation>注册对象的状态（新建\可用\废弃）</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="classCode" type="CodeableConcept">
+                <xs:annotation>
+                    <xs:documentation>注册对象的分类（最粗粒度的分类）
+                        如果需要细粒度的分类,在具体对象添加</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="extension" type="Extension">
+                <xs:annotation>
+                    <xs:documentation>扩展机制.
+                        当注册对象未含有期望的元素,可以通过该方法进行扩展.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="BloodType">
+        <xs:sequence>
+            <xs:element name="RH" type="Boolean"/>
+            <xs:element name="ABO" type="CodeableConcept"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="HealthHistoryType">
+        <xs:annotation>
+            <xs:documentation/>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="name" type="CodeableConcept"/>
+            <xs:element minOccurs="0" name="confirmedTime" type="DateTime"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FamilyHistoryType">
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="relatives">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="relativeType" type="Coding"/>
+                        <xs:element name="diseaseHistory" type="HealthHistoryType"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="PhysicalCondition">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="booldType" type="BloodType"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="allergicHistory"
+                        type="HealthHistoryType"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="diseaseHistory"
+                        type="HealthHistoryType"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="operationHistory"
+                        type="HealthHistoryType"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="rtaumaHistory"
+                        type="HealthHistoryType"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="transfusionHistory"
+                        type="HealthHistoryType"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="geneticHistory"
+                        type="HealthHistoryType"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="familyHistory"
+                        type="FamilyHistoryType"> </xs:element>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="disabilitySituation"
+                        type="CodeableConcept"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Contact">
+        <xs:annotation>
+            <xs:documentation>联系人类型</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="identifier" type="Identifier">
+                <xs:annotation>
+                    <xs:documentation>标识符</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="code" type="CodeableConcept">
+                <xs:annotation>
+                    <xs:documentation>编码</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="address" type="Address">
+                <xs:annotation>
+                    <xs:documentation>地址</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="telecom" type="Telecom">
+                <xs:annotation>
+                    <xs:documentation>联系电话</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="assignedPerson" type="Person"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Guardian">
+        <xs:annotation>
+            <xs:documentation/>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="identifier" type="Identifier" maxOccurs="unbounded"/>
+            <xs:element minOccurs="0" name="code" type="CodeableConcept">
+                <xs:annotation>
+                    <xs:documentation>编码</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="address" type="Address"/>
+            <xs:element name="telecom" type="Telecom" minOccurs="0"/>
+            <xs:element minOccurs="0" name="effectiveTime" type="Period"/>
+            <xs:choice>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="guardianPerson" type="Person"> </xs:element>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="guardianOrganization"
+                            type="Organization"> </xs:element>
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Person">
+        <xs:annotation>
+            <xs:documentation>居民实体类</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="RegObject">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="identifier" type="Identifier" minOccurs="0"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="name" type="HumanName"/>
+                    <xs:element name="birthTime" type="Date" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>出生日期</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="gender" type="Code">
+                        <xs:annotation>
+                            <xs:documentation>性别</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="address" type="Address">
+                        <xs:annotation>
+                            <xs:documentation>地址</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="telecom" type="Telecom">
+                        <xs:annotation>
+                            <xs:documentation>联系方式</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="languageCommunication" type="Language" maxOccurs="unbounded"/>
+                    <xs:element minOccurs="0" name="birthPlace" type="Address">
+                        <xs:annotation>
+                            <xs:documentation>出生地</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="maritalStatusCode" type="Code">
+                        <xs:annotation>
+                            <xs:documentation>婚姻状态</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:choice minOccurs="0">
+                        <xs:element name="deceasedInd" type="Boolean">
+                            <xs:annotation>
+                                <xs:documentation>死亡标记</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="deceasedTime" type="DateTime">
+                            <xs:annotation>
+                                <xs:documentation>死亡时间</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:choice>
+                    <xs:choice minOccurs="0">
+                        <xs:element name="multipleBirthInd" type="Boolean">
+                            <xs:annotation>
+                                <xs:documentation>多胎标记</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="multipleBirthOrderNumber" type="Integer">
+                            <xs:annotation>
+                                <xs:documentation>多胎次序</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:choice>
+
+                    <xs:element minOccurs="0" name="photo" type="Base64Binary">
+                        <xs:annotation>
+                            <xs:documentation>头像图片</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="Patient">
+        <xs:complexContent>
+            <xs:extension base="RegObject">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="identifier" type="Identifier" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:documentation>患者角色编码、如就诊号、 健康卡号、住院号、门诊号等。</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="address" type="Address">
+                        <xs:annotation>
+                            <xs:documentation>地址</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="telecom" type="Telecom">
+                        <xs:annotation>
+                            <xs:documentation>联系电话
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="effectiveTime" type="DateTime"/>
+                    <xs:element name="assignedPerson" type="Person" minOccurs="0"/>
+                    <xs:element minOccurs="0" name="assignedOrganization" type="Organization">
+                        <xs:annotation>
+                            <xs:documentation>居委会</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="contact" type="Contact" maxOccurs="unbounded"/>
+                    <xs:element minOccurs="0" name="guardian" type="Guardian" maxOccurs="unbounded" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="Organization">
+        <xs:annotation>
+            <xs:documentation>科室、机构</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="RegObject">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="identifier" type="Identifier">
+                        <xs:annotation>
+                            <xs:documentation>机构编码</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="name" type="String">
+                        <xs:annotation>
+                            <xs:documentation>机构名称</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="healthcareFacilityTypeCode" type="CodeableConcept">
+                        <xs:annotation>
+                            <xs:documentation>机构的类型</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="practiceSettingCode" type="CodeableConcept">
+                        <xs:annotation>
+                            <xs:documentation>机构的专业分类</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="address" type="Address">
+                        <xs:annotation>
+                            <xs:documentation>地址</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="telecom" type="Telecom">
+                        <xs:annotation>
+                            <xs:documentation>联系方式</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="effectiveTime" type="DateTime">
+                        <xs:annotation>
+                            <xs:documentation>机构创建时间</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <!--                    <xs:element name="partOf" type="Organization" minOccurs="0">-->
+                    <!--                        <xs:annotation>-->
+                    <!--                            <xs:documentation>指向上一级机构</xs:documentation>-->
+                    <!--                        </xs:annotation>-->
+                    <!--                    </xs:element>-->
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="MainID">
+        <xs:complexContent>
+            <xs:extension base="ID">
+                <xs:sequence>
+                    <xs:element name="system" type="uriPrimitive"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="Practitioner">
+        <xs:annotation>
+            <xs:documentation>医护人员类型</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="RegObject">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="identifier" type="Identifier" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:documentation>医疗卫生人员的编码，如工号、统一编码等。</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="duty" type="Coding" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:documentation>职务</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="professionalTitle" type="Coding" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:documentation>职称</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <!--                    <xs:element name="address" type="AddressType" minOccurs="0" maxOccurs="unbounded">-->
+                    <!--                        <xs:annotation>-->
+                    <!--                            <xs:documentation>联系地址</xs:documentation>-->
+                    <!--                        </xs:annotation>-->
+                    <!--                    </xs:element>-->
+                    <!--                    <xs:element name="telecom" minOccurs="0" maxOccurs="unbounded" type="Telecom">-->
+                    <!--                        <xs:annotation>-->
+                    <!--                            <xs:documentation>联系电话</xs:documentation>-->
+                    <!--                        </xs:annotation>-->
+                    <!--                    </xs:element>-->
+                    <xs:element name="assignedPerson" type="Person"/>
+                    <!--                    <xs:element name="practiceOrganization" type="Organization" minOccurs="0">-->
+                    <!--                        <xs:annotation>-->
+                    <!--                            <xs:documentation>科室及执业机构</xs:documentation>-->
+                    <!--                        </xs:annotation>-->
+                    <!--                    </xs:element>-->
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="PersonBrief">
+        <xs:annotation>
+            <xs:documentation>居民信息查询参数</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="identifier" type="Identifier">
+                <xs:annotation>
+                    <xs:documentation>标识符</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="name" type="HumanName">
+                <xs:annotation>
+                    <xs:documentation>名称</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="birthTime" type="Date">
+                <xs:annotation>
+                    <xs:documentation>出生日期</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="gender" type="Code">
+                <xs:annotation>
+                    <xs:documentation>性别</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="addr" type="Address">
+                <xs:annotation>
+                    <xs:documentation>地址</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="telecom" type="Telecom">
+                <xs:annotation>
+                    <xs:documentation>联系方式</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="OrganizationBrief">
+        <xs:annotation>
+            <xs:documentation>机构查询参数</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="identifier" type="Identifier">
+                <xs:annotation>
+                    <xs:documentation>标识符</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="classCode" type="Coding" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>机构（科室）类别</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="name" type="String">
+                <xs:annotation>
+                    <xs:documentation>机构名称</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="address" type="Address">
+                <xs:annotation>
+                    <xs:documentation>地址</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="telecom" type="Telecom">
+                <xs:annotation>
+                    <xs:documentation>联系方式</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="partOf" type="OrganizationBrief"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="PractitionerBrief">
+        <xs:annotation>
+            <xs:documentation>医护人员查询参数</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="identifier" type="Identifier">
+                <xs:annotation>
+                    <xs:documentation>标识符</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="name" type="HumanName">
+                <xs:annotation>
+                    <xs:documentation>医务人员姓名</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="organization" type="OrganizationBrief"/>
+            <xs:element minOccurs="0" name="duty" type="Coding" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>职务</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="professionalTitle" type="Coding" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>职称</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Extension">
+        <xs:annotation>
+            <xs:documentation>扩展类型,支持扩展机制。</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="name" type="URI">
+                <xs:annotation>
+                    <xs:documentation>关键字</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element maxOccurs="unbounded" name="value" type="Any">
+                <xs:annotation>
+                    <xs:documentation>取值,可以为Any的任何继承类</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="objectStatusPrimitive">
+        <xs:annotation>
+            <xs:documentation>
+                New 		- 新建
+                Active      - 可用
+                Nullified   - 废弃
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="stringPrimitive">
+            <xs:enumeration value="New"/>
+            <xs:enumeration value="Active"/>
+            <xs:enumeration value="Nullified"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="ObjectStatus">
+        <xs:complexContent>
+            <xs:extension base="Any">
+                <xs:attribute name="value" type="objectStatusPrimitive"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="AdhocQuery">
+        <xs:annotation>
+            <xs:documentation>预存查询类型</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="id" type="URN">
+                <xs:annotation>
+                    <xs:documentation>预存储查询的唯一编号</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element maxOccurs="unbounded" name="slot" type="Slot">
+                <xs:annotation>
+                    <xs:documentation>预存储查询参数列表,各参数之间为AND关系</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="adhocQuery" type="AdhocQuery">
+        <xs:annotation>
+            <xs:documentation>通用查询元素
+                本消息元素在订阅服务/Subscribe/Filter节点或查询中引用。</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="ObjectRef">
+        <xs:annotation>
+            <xs:documentation>对象索引</xs:documentation>
+        </xs:annotation>
+        <xs:sequence minOccurs="0">
+            <xs:element name="id" type="MainID" maxOccurs="1" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>主域标识（注册码、主索引号）</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+
+
+
+    <xs:element name="OrganizationFeed" type="OrganizationFeed">
+        <xs:annotation>
+            <xs:documentation>IST-MIR1：医疗卫生机构信息提交消息
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="OrganizationFeedResponse" type="OrganizationFeedResponse">
+        <xs:annotation>
+            <xs:documentation>IST-MIR1：响应信息</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="OrganizationQuery" type="OrganizationQueryRequest">
+        <xs:annotation>
+            <xs:documentation>IST-MIR2：医疗机构信息查询条件
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="OrganizationQueryResponse" type="OrganizationQueryResponseMessage">
+        <xs:annotation>
+            <xs:documentation>IST-MIR2：响应信息</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="organizationRevise" type="OrganizationReviseNotify">
+        <xs:annotation>
+            <xs:documentation>IST-MIR4：医疗卫生机构信息变更通知。本消息元素在基础通知服务/Notify/NotificationMessage/Message节点中引用。</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="OrganizationFeed">
+        <xs:annotation>
+            <xs:documentation>IST-MIR1：医疗卫生机构信息提交消息数据类型</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="organization" type="Organization"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="OrganizationFeedResponse">
+        <xs:annotation>
+            <xs:documentation>IST-MIR1：响应信息数据类型</xs:documentation>
+        </xs:annotation>
+        <xs:choice>
+            <xs:element name="masterIdentifier" type="Identifier"/>
+        </xs:choice>
+    </xs:complexType>
+    <xs:complexType name="OrganizationQueryRequest">
+        <xs:annotation>
+            <xs:documentation>IST-MIR2：医疗机构信息查询条件数据类型
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="from" type="Integer" minOccurs="0"/>
+            <xs:element name="maxCount" type="Integer" minOccurs="0"/>
+            <xs:element name="adhocQuery" type="AdhocQuery"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="OrganizationQueryResponseMessage">
+        <xs:annotation>
+            <xs:documentation>IST-MIR2：响应信息数据类型</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="totalCount" type="Integer"/>
+            <xs:element name="from" type="Integer" minOccurs="0"/>
+            <xs:element name="count" type="Integer" minOccurs="0"/>
+            <xs:element name="organization" type="Organization" minOccurs="0" maxOccurs="unbounded"
+            />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="OrganizationReviseNotify">
+        <xs:annotation>
+            <xs:documentation>IST-MIR3：医疗卫生机构信息变更通知数据类型</xs:documentation>
+        </xs:annotation>
+        <xs:choice>
+            <xs:element name="organization" type="Organization" maxOccurs="unbounded"/>
+        </xs:choice>
+    </xs:complexType>
+</xs:schema>

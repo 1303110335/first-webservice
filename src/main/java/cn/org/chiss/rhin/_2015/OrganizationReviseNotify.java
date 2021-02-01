@@ -1,0 +1,76 @@
+//
+// 此文件是由 JavaTM Architecture for XML Binding (JAXB) 引用实现 v2.2.7 生成的
+// 请访问 <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
+// 在重新编译源模式时, 对此文件的所有修改都将丢失。
+// 生成时间: 2021.02.01 时间 10:16:45 AM CST 
+//
+
+
+package cn.org.chiss.rhin._2015;
+
+import java.util.ArrayList;
+import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
+
+
+/**
+ * IST-MIR3：医疗卫生机构信息变更通知数据类型
+ * 
+ * <p>OrganizationReviseNotify complex type的 Java 类。
+ * 
+ * <p>以下模式片段指定包含在此类中的预期内容。
+ * 
+ * <pre>
+ * &lt;complexType name="OrganizationReviseNotify">
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;choice>
+ *         &lt;element name="organization" type="{http://www.chiss.org.cn/rhin/2015}Organization" maxOccurs="unbounded"/>
+ *       &lt;/choice>
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
+ * 
+ */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "OrganizationReviseNotify", propOrder = {
+    "organization"
+})
+public class OrganizationReviseNotify {
+
+    protected List<Organization> organization;
+
+    /**
+     * Gets the value of the organization property.
+     * 
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the organization property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getOrganization().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link Organization }
+     * 
+     * 
+     */
+    public List<Organization> getOrganization() {
+        if (organization == null) {
+            organization = new ArrayList<Organization>();
+        }
+        return this.organization;
+    }
+
+}

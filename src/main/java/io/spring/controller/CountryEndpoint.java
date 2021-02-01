@@ -2,12 +2,14 @@
  * xuleyan
  * Copyright (C) 2013-2021 All Rights Reserved.
  */
-package io.spring.config;
+package io.spring.controller;
 
 /**
  * @author xuleyan
  * @version CountryEndpoint.java, v 0.1 2021-01-31 10:09 PM xuleyan
  */
+
+import io.spring.config.CountryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -28,14 +30,14 @@ public class CountryEndpoint {
         this.countryRepository = countryRepository;
     }
 
-    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getCountryRequest") //Spring WS使用它来根据消息的名称空间和localPart选择处理程序方法。
-    @ResponsePayload //将返回值映射到响应
-    public GetCountryResponse getCountry(
-            @RequestPayload GetCountryRequest request // 表示传入消息将映射到方法的请求参数
-    ) {
+    //Spring WS使用它来根据消息的名称空间和localPart选择处理程序方法。
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getCountryRequest")
+    //将返回值映射到响应
+    @ResponsePayload
+    // 表示传入消息将映射到方法的请求参数
+    public GetCountryResponse getCountry(@RequestPayload GetCountryRequest request) {
         GetCountryResponse response = new GetCountryResponse();
         response.setCountry(countryRepository.findCountry(request.getName()));
-
         return response;
     }
 }

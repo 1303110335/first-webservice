@@ -5,5 +5,5 @@
 // 生成时间: 2021.02.01 时间 10:16:45 AM CST 
 //
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://spring.io/guides/gs-producing-web-service", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
-package io.spring.guides.gs_producing_web_service;
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.chiss.org.cn/rhin/2015", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+package cn.org.chiss.rhin._2015;

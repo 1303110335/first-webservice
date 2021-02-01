@@ -6,26 +6,27 @@
 //
 
 
-package io.spring.guides.gs_producing_web_service;
+package cn.org.chiss.rhin._2015;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>anonymous complex type的 Java 类。
+ * IST-MIR1：医疗卫生机构信息提交消息数据类型
+ * 
+ * <p>OrganizationFeed complex type的 Java 类。
  * 
  * <p>以下模式片段指定包含在此类中的预期内容。
  * 
  * <pre>
- * &lt;complexType>
+ * &lt;complexType name="OrganizationFeed">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="organization" type="{http://www.chiss.org.cn/rhin/2015}Organization"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -35,37 +36,36 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "name"
+@XmlType(name = "OrganizationFeed", propOrder = {
+    "organization"
 })
-@XmlRootElement(name = "getCountryRequest")
-public class GetCountryRequest {
+public class OrganizationFeed {
 
     @XmlElement(required = true)
-    protected String name;
+    protected Organization organization;
 
     /**
-     * 获取name属性的值。
+     * 获取organization属性的值。
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Organization }
      *     
      */
-    public String getName() {
-        return name;
+    public Organization getOrganization() {
+        return organization;
     }
 
     /**
-     * 设置name属性的值。
+     * 设置organization属性的值。
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link Organization }
      *     
      */
-    public void setName(String value) {
-        this.name = value;
+    public void setOrganization(Organization value) {
+        this.organization = value;
     }
 
 }
